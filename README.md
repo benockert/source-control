@@ -1,3 +1,7 @@
+### Video Source Control
+Controller for Northeastern's 2022 Commencement video screens
+
+---
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
