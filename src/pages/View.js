@@ -3,7 +3,7 @@ import { Livestream } from './sources/Livestream';
 import { PhotoMosaic } from './sources/PhotoMosaic';
 import { Wonderwall } from './sources/Wonderwall';
 import { FormControl, Button, Row, Col } from 'react-bootstrap';
-import { ref, onValue, set, remove } from "firebase/database";
+import { ref, onValue, set, remove, get, child } from "firebase/database";
 
 import { database } from '../App';
 
@@ -11,20 +11,39 @@ export const View = () => {
     const [screenRegistered, setScreenRegistered] = useState(false);
     const [screenName, setScreenName] = useState();
     const [source, setSource] = useState(); // one of 'livestream', 'wonderwall', 'photomosaic'
+    const [accessPath, setAccessPath] = useState();
 
     useEffect(() => {
-        window.addEventListener('unload', (event) => {
+        // get today's access path
+        get(child(ref(database), `accessCode`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                setAccessPath(snapshot.val());
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+
+    }, []);
+
+    useEffect(() => {
+        accessPath && screenName && window.addEventListener('unload', (event) => {
             event.preventDefault();
 
+            console.log("Setting listener");
+
             // removing the screen when the window closes 
-            const screenRef = ref(database, `screens/${screenName}`)
+            const screenRef = ref(database, `screens/${accessPath}/${screenName}`)
             remove(screenRef);
         });
-    }, [screenName]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [screenRegistered, accessPath]);
 
     useEffect(() => {
         // get current source and set it, open listener
-        const connectedScreenRef = ref(database, `screens/${screenName}`);
+        const connectedScreenRef = ref(database, `screens/${accessPath}/${screenName}`);
         onValue(connectedScreenRef, (snapshot) => {
             const data = snapshot.val();
             console.log(`UPDATED SOURCE for ${screenName}:`, data)
@@ -37,7 +56,7 @@ export const View = () => {
     const setScreenNameAndWriteToFirebase = () => {
         // write screen name to firebase, with source set to 'livestream'
         // then set screen registered to true
-        set(ref(database, `screens/${screenName}`), 'livestream');
+        set(ref(database, `screens/${accessPath}/${screenName}`), 'livestream');
         setScreenRegistered(true)
     }
 
@@ -55,8 +74,10 @@ export const View = () => {
 
     return (
         <div>
-            {screenRegistered ?
-                displaySource()
+            {accessPath && (screenRegistered ?
+                <div style={source === 'livestream' ? { 'background-color': '#000000' } : { 'background-color': '#ffffff' }}>
+                    {displaySource()}
+                </div>
                 :
                 <>
                     <h2>NU Commencement - Video Source Control</h2>
@@ -74,7 +95,7 @@ export const View = () => {
                         </Col>
                     </Row>
                 </>
-            }
+            )}
         </div >
     );
 }

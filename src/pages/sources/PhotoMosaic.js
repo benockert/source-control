@@ -1,4 +1,4 @@
-import './ocm-virtual.css';
+import './sources.css';
 
 export const PhotoMosaic = () => {
 

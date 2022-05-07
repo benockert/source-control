@@ -1,6 +1,8 @@
 ### Video Source Control
 Controller for Northeastern's 2022 Commencement video screens
 
+*Deploy:* `aws s3 sync build/ s3://nu-commencement-2022`
+
 ---
 # Getting Started with Create React App
 
