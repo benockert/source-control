@@ -12,18 +12,37 @@ export const View = () => {
     const [screenName, setScreenName] = useState();
     const [source, setSource] = useState(); // one of 'livestream', 'wonderwall', 'photomosaic'
     const [accessPath, setAccessPath] = useState();
+    const [error, setError] = useState();
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    useEffect(() => {
+        window.addEventListener("touchstart", tapHandler);
+
+        // listener for tapping the screen twice
+        var tapedTwice = false;
+        function tapHandler(event) {
+            if (!tapedTwice) {
+                tapedTwice = true;
+                setTimeout(function () { tapedTwice = false; }, 300);
+                return false;
+            }
+            event.preventDefault();
+            // redirect to admin sign-in
+            window.location = "/admin"
+        }
+    }, []);
 
     useEffect(() => {
         // get today's access path
         get(child(ref(database), `accessCode`)).then((snapshot) => {
             if (snapshot.exists()) {
-                console.log(snapshot.val());
                 setAccessPath(snapshot.val());
             } else {
-                console.log("No data available");
+                setError("Access currently unavailable")
             }
         }).catch((error) => {
-            console.error(error);
+            //write error to db
         });
 
     }, []);
@@ -32,31 +51,39 @@ export const View = () => {
         accessPath && screenName && window.addEventListener('unload', (event) => {
             event.preventDefault();
 
-            console.log("Setting listener");
+            // write event to log
+            set(ref(database, `events/${today}/${new Date().toLocaleTimeString().padStart(11, '0')}`), `DISCONNECTED: ${screenName}`);
 
             // removing the screen when the window closes 
             const screenRef = ref(database, `screens/${accessPath}/${screenName}`)
             remove(screenRef);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [screenRegistered, accessPath]);
+    }, [screenRegistered, accessPath, today]);
+
+    useEffect(() => {
+        source && set(ref(database, `events/${today}/${new Date().toLocaleTimeString().padStart(11, '0')}`), `UPDATE: ${screenName} --> ${source}`);
+    }, [source, today, screenName]);
 
     useEffect(() => {
         // get current source and set it, open listener
         const connectedScreenRef = ref(database, `screens/${accessPath}/${screenName}`);
         onValue(connectedScreenRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(`UPDATED SOURCE for ${screenName}:`, data)
             setSource(data);
         });
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [screenRegistered]);
 
     const setScreenNameAndWriteToFirebase = () => {
+        // write event to log
+        set(ref(database, `events/${today}/${new Date().toLocaleTimeString().padStart(11, '0')}`), `CONNECTED: ${screenName}`).then(
+            set(ref(database, `screens/${accessPath}/${screenName}`), 'livestream')
+        );
+
         // write screen name to firebase, with source set to 'livestream'
         // then set screen registered to true
-        set(ref(database, `screens/${accessPath}/${screenName}`), 'livestream');
+
         setScreenRegistered(true)
     }
 
@@ -74,8 +101,8 @@ export const View = () => {
 
     return (
         <div>
-            {accessPath && (screenRegistered ?
-                <div style={source === 'livestream' ? { 'background-color': '#000000' } : { 'background-color': '#ffffff' }}>
+            {accessPath ? (screenRegistered ?
+                <div style={source === 'livestream' ? { 'backgroundColor': '#000000' } : { 'backgroundColor': '#ffffff' }}>
                     {displaySource()}
                 </div>
                 :
@@ -95,7 +122,9 @@ export const View = () => {
                         </Col>
                     </Row>
                 </>
-            )}
+            )
+                :
+                <h4 style={{ 'color': 'red', 'margin': '10px' }}>{error}</h4>}
         </div >
     );
 }
