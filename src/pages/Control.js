@@ -92,6 +92,7 @@ export const Control = () => {
                         <Button variant={screens && screens[selectedScreen] === 'livestream' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('livestream')}>Livestream</Button>
                         <Button variant={screens && screens[selectedScreen] === 'photomosaic' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('photomosaic')}>Photo Mosaic</Button>
                         <Button variant={screens && screens[selectedScreen] === 'wonderwall' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('wonderwall')}>Wonder Wall</Button>
+                        <Button variant={screens && screens[selectedScreen] === 'youtube' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('youtube')}>Youtube - test</Button>
                     </ButtonGroup>
                 </>
             }

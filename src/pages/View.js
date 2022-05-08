@@ -5,6 +5,8 @@ import { Wonderwall } from './sources/Wonderwall';
 import { FormControl, Button, Row, Col } from 'react-bootstrap';
 import { ref, onValue, set, remove, get, child } from "firebase/database";
 
+import { YouTube } from './sources/YouTube';
+
 import { database } from '../App';
 
 export const View = () => {
@@ -93,6 +95,8 @@ export const View = () => {
                 return <Wonderwall />
             case 'photomosaic':
                 return <PhotoMosaic />
+            case 'youtube':
+                return <YouTube />
             default:
             case 'livetream':
                 return <Livestream />
@@ -102,7 +106,7 @@ export const View = () => {
     return (
         <div>
             {accessPath ? (screenRegistered ?
-                <div style={source === 'livestream' ? { 'backgroundColor': '#000000' } : { 'backgroundColor': '#ffffff' }}>
+                <div style={source === 'livestream' || source === 'youtube' ? { 'backgroundColor': '#000000' } : { 'backgroundColor': '#ffffff' }}>
                     {displaySource()}
                 </div>
                 :
