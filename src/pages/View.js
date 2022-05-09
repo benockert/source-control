@@ -5,8 +5,6 @@ import { Wonderwall } from './sources/Wonderwall';
 import { FormControl, Button, Row, Col } from 'react-bootstrap';
 import { ref, onValue, set, remove, get, child } from "firebase/database";
 
-import { YouTube } from './sources/YouTube';
-
 import { database } from '../App';
 
 export const View = () => {
@@ -95,8 +93,6 @@ export const View = () => {
                 return <Wonderwall />
             case 'photomosaic':
                 return <PhotoMosaic />
-            case 'youtube':
-                return <YouTube />
             default:
             case 'livetream':
                 return <Livestream />
@@ -110,7 +106,7 @@ export const View = () => {
                     {displaySource()}
                 </div>
                 :
-                <>
+                <div style={{ 'margin': '10px' }}>
                     <h2>NU Commencement - Video Source Control</h2>
                     <Row>
                         <Col xs={9}>
@@ -125,7 +121,7 @@ export const View = () => {
                             <Button variant="primary" disabled={screenName ? null : true} onClick={() => setScreenNameAndWriteToFirebase()}>Register Screen</Button>
                         </Col>
                     </Row>
-                </>
+                </div>
             )
                 :
                 <h4 style={{ 'color': 'red', 'margin': '10px' }}>{error}</h4>}

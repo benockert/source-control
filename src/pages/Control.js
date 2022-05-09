@@ -48,6 +48,7 @@ export const Control = () => {
 
     return (
         <div style={{ 'margin': '10px' }}>
+            <h1 style={{ 'font-size': '30px' }} class="display-4"><img style={{ 'height': '50px', 'margin-right': '10px' }} src="/logo.png" alt=""></img>Commencement 2022</h1>
             {!accessCodeEntered &&
                 <>
                     <h3>Sign in to admin:</h3>
@@ -92,7 +93,6 @@ export const Control = () => {
                         <Button variant={screens && screens[selectedScreen] === 'livestream' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('livestream')}>Livestream</Button>
                         <Button variant={screens && screens[selectedScreen] === 'photomosaic' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('photomosaic')}>Photo Mosaic</Button>
                         <Button variant={screens && screens[selectedScreen] === 'wonderwall' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('wonderwall')}>Wonder Wall</Button>
-                        <Button variant={screens && screens[selectedScreen] === 'youtube' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('youtube')}>Youtube - test</Button>
                     </ButtonGroup>
                 </>
             }
