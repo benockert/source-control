@@ -31,7 +31,7 @@ export const Control = () => {
     }, [selectedSource]);
 
     useEffect(() => {
-        const today = new Date().toISOString().slice(0, 10)
+        const today = new Date().toLocaleDateString().replaceAll('/', '-');
 
         const eventLogRef = ref(database, `events/${today}`);
         accessCodeEntered && onValue(eventLogRef, (snapshot) => {

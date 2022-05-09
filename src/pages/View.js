@@ -14,7 +14,7 @@ export const View = () => {
     const [accessPath, setAccessPath] = useState();
     const [error, setError] = useState();
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date().toLocaleDateString().replaceAll('/', '-');
 
     useEffect(() => {
         window.addEventListener("touchstart", tapHandler);
