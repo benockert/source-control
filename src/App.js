@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { View } from './pages/View';
 import { Control } from './pages/Control'
 import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from "firebase/database";

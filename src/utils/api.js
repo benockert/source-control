@@ -8,7 +8,6 @@ export async function spotify_pause(accessToken) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
     };
     let resp = await fetch('https://api.spotify.com/v1/me/player/pause', req);
-    console.log("RESPONSE: ", resp);
     return resp;
 }
 
@@ -39,4 +38,16 @@ export async function generate_new_access_token(refreshToken) {
     let data = await resp.json();
 
     set(ref(database, 'spotify_creds/access_token'), data.access_token);
+}
+
+//
+
+export async function spotify_change_volume(accessToken, volume) {
+    let req = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    };
+
+    let resp = await fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}`, req);
+    return resp;
 }

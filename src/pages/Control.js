@@ -38,6 +38,7 @@ export const Control = () => {
             const data = snapshot.val();
             setEventLog(data);
         });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [accessCodeEntered]);
 
@@ -48,7 +49,7 @@ export const Control = () => {
 
     return (
         <div style={{ 'margin': '10px' }}>
-            <h1 style={{ 'font-size': '30px' }} class="display-4"><img style={{ 'height': '50px', 'margin-right': '10px' }} src="/logo.png" alt=""></img>Commencement 2022</h1>
+            <h1 style={{ 'fontSize': '30px' }} className="display-4"><img style={{ 'height': '50px', 'marginRight': '10px' }} src="/logo.png" alt=""></img>Commencement 2022</h1>
             {!accessCodeEntered &&
                 <>
                     <h3>Sign in to admin:</h3>
@@ -93,16 +94,17 @@ export const Control = () => {
                         <Button variant={screens && screens[selectedScreen] === 'livestream' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('livestream')}>Livestream</Button>
                         <Button variant={screens && screens[selectedScreen] === 'photomosaic' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('photomosaic')}>Photo Mosaic</Button>
                         <Button variant={screens && screens[selectedScreen] === 'wonderwall' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('wonderwall')}>Wonder Wall</Button>
+                        <Button variant={screens && screens[selectedScreen] === 'banner' ? 'primary' : 'secondary'} onClick={() => setSelectedSource('banner')}>Banner</Button>
                     </ButtonGroup>
                 </>
             }
             {
                 eventLog &&
                 <>
-                    <h4 style={{ 'marginTop': '20px' }}>Event log: <h6 style={{ 'font-size': '12px', 'font-weight': '200' }}>Last 20 events</h6></h4>
+                    <h4 style={{ 'marginTop': '20px' }}>Event log: <p style={{ 'fontSize': '12px', 'fontWeight': '200' }}>Last 20 events</p></h4>
                     <ListGroup>
                         {Object.entries(eventLog).reverse().slice(0, 20).map(function (entry) {
-                            return <ListGroup.Item key={entry[0]}><b>{entry[0]}</b> {entry[1]}</ListGroup.Item>
+                            return <ListGroup.Item key={entry[0]}><b>{entry[1].time}</b> {entry[1].text}</ListGroup.Item>
                         })}
                     </ListGroup>
 

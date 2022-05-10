@@ -3,6 +3,14 @@ Controller for Northeastern's 2022 Commencement video screens
 
 *Deploy:* `aws s3 sync build/ s3://nu-commencement-2022`
 
+Autoplay workaround: `start chrome.exe --autoplay-policy=no-user-gesture-required`
+
+Main issues:
+- hardcoded snell quad
+- hardcoded access tokens
+- not abstracting portions of the api calls
+- volume being set as an overall paramter rather than per individual screen
+
 ---
 # Getting Started with Create React App
 
